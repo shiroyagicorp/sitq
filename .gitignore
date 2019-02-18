@@ -1,0 +1,6 @@
+.venv
+.vscode
+sitq.egg-info
+__pycache__
+build
+dist
