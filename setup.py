@@ -7,7 +7,7 @@ with open(os.path.join(src_dir, 'README.rst')) as f:
 
 setuptools.setup(
     name='sitq',
-    version='0.1.2',
+    version='0.1.3',
     author='Kazuaki Tanida',
     description='Learning to Hash for Maximum Inner Product Search',
     long_description=long_description,
