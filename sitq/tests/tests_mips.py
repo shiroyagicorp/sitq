@@ -30,6 +30,10 @@ def test_mips():
     assert len(item_idxs) == len(scores) == 10
     assert items[item_idxs[0]].dot(query) > items[item_idxs[-1]].dot(query)
 
+    item_idxs, scores = mips.search(
+        query, limit=100000, max_distance=10, sort=False)
+    assert len(item_idxs) == len(scores) == 10000
+
 
 def test_precision():
     items = np.random.randn(10000, 50)

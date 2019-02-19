@@ -98,6 +98,7 @@ class Mips:
         item_vectors = np.array([item[1] for item in items])
         scores = item_vectors.dot(query)
         if limit is not None:
+            limit = np.clip(limit, 0, len(scores))
             idxs = np.argpartition(scores, -1 * limit)[-1 * limit:]
             items = items[idxs]
             scores = scores[idxs]
