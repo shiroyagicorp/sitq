@@ -58,7 +58,7 @@ class Mips:
 
         return self
 
-    def search(self, query, limit=None, max_distance=0, sort=True):
+    def search(self, query, limit=None, distance=0, require_items=False, sort=True):
         """
         Find items which are likely to maximize inner product against query.
 
@@ -67,9 +67,15 @@ class Mips:
         query: array_like, shape(n_features)
             Vector for query.
         limit: int or None, optional
-            The maximum number of items to be returned.
-        max_distance: int, optional
-            The number of bits by which query and signature can differ.
+            The maximum number of items to be returned. It must be positive.
+        distance: int, optional
+            The number of bits by which query and signature can differ. 
+            Maximum number of different bits may be over this number if 
+            `require_items` is set to true.
+        require_items: bool, optional
+            If true, then the number of returned items must be `limit`.
+            `distance` is ignored if the number of fetched items was
+            insufficient.
         sort: bool, optional
             If true, then the returned `item_names` are sorted in descending
             order according to these `scores`.
@@ -85,14 +91,17 @@ class Mips:
         query_sig = self._sitq.get_query_signatures([query])[0]
 
         items = []
-        max_distance = np.clip(max_distance, 0, self._sitq._signature_size)
-        for i in range(max_distance + 1):
-            for mutation_indexes in combinations(range(max_distance), i):
+        distance = np.clip(distance, 0, self._sitq._signature_size)
+        for i in range(self._sitq._signature_size + 1):
+            for mutation_indexes in combinations(range(self._sitq._signature_size), i):
                 mutated_sig = copy(query_sig)
                 for idx in mutation_indexes:
                     mutated_sig[idx] = bool((mutated_sig[idx] + 1) % 2)
                 _sig = tuple(mutated_sig)
                 items += self._table[_sig]
+            if (not require_items and i == distance) or \
+                    (require_items and isinstance(limit, int) and len(items) >= limit):
+                break
 
         items = np.array(items)
         item_vectors = np.array([item[1] for item in items])

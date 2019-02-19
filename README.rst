@@ -108,7 +108,7 @@ Retrieve items
     mips.fit(items)
 
     # Find items which are likely to maximize inner product against query
-    item_indexes, scores = mips.search(query, limit=10, max_distance=1)
+    item_indexes, scores = mips.search(query, limit=10, distance=1)
 
 References
 ----------
