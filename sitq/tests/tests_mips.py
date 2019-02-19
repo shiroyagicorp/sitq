@@ -20,7 +20,7 @@ def test_mips():
         query, limit=10, distance=2, sort=False)
     assert len(item_idxs) == len(scores) == 10
 
-    _lens = [len(items) for items in mips._table.values()]
+    _lens = [len(_) for _ in mips._vector_table.values()]
     item_idxs, scores = mips.search(
         query, limit=None, distance=0, sort=False)
     assert min(_lens) <= len(item_idxs) == len(scores) <= max(_lens)
@@ -37,6 +37,10 @@ def test_mips():
     item_idxs, scores = mips.search(
         query, limit=100000, distance=10, sort=False)
     assert len(item_idxs) == len(scores) == len(items)
+
+    item_idxs, scores = mips.search(
+        query, limit=None, distance=1, sort=True)
+    assert scores[0] > scores[1]
 
 
 def test_few_items():
