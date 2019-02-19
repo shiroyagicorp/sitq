@@ -35,6 +35,15 @@ def test_mips():
     assert len(item_idxs) == len(scores) == 10000
 
 
+def test_few_items():
+    items = np.random.rand(4, 10)
+    queries = np.random.randn(100, 10)
+    mips = Mips(signature_size=4).fit(items)
+
+    for query in queries:
+        mips.search(query)
+
+
 def test_precision():
     items = np.random.randn(10000, 50)
     queries = np.random.randn(100, 50)
