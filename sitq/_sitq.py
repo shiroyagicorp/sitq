@@ -73,7 +73,7 @@ class Sitq:
 
         Parameters
         ----------
-        items: array_like, shape(n_queries, n_features)
+        queries: array_like, shape(n_queries, n_features)
 
         Returns
         -------
